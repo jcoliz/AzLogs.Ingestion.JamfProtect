@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace WorkerApp;
 
@@ -20,6 +21,10 @@ public partial class Worker : BackgroundService
                 logOk();
                 await Task.Delay(1000, stoppingToken);
             }            
+        }
+        catch (TaskCanceledException)
+        {
+            // Normal exit
         }
         catch (Exception ex)
         {
