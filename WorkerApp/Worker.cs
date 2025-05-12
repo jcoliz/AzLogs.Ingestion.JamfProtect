@@ -1,6 +1,8 @@
+using System.Runtime.CompilerServices;
+
 namespace WorkerApp;
 
-public class Worker : BackgroundService
+public partial class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
 
@@ -11,13 +13,26 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        try
         {
-            if (_logger.IsEnabled(LogLevel.Information))
+            while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }
-            await Task.Delay(1000, stoppingToken);
+                logOk();
+                await Task.Delay(1000, stoppingToken);
+            }            
+        }
+        catch (Exception ex)
+        {
+            logCritical(ex);
         }
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "{Location}: OK", EventId = 1000)]
+    public partial void logOk([CallerMemberName] string? location = null);
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "{Location}: Failed", EventId = 1008)]
+    public partial void logFail(Exception ex,[CallerMemberName] string? location = null);
+
+    [LoggerMessage(Level = LogLevel.Critical, Message = "{Location}: Critical failure", EventId = 1009)]
+    public partial void logCritical(Exception ex,[CallerMemberName] string? location = null);
 }
