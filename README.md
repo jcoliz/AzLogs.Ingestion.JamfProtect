@@ -6,6 +6,7 @@ In order to follow the instructions shown here, and run this sample, you will fi
 
 * An Azure Account. Set up a [Free Azure Account](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account) to get started.
 * [Azure CLI tool with Bicep](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#azure-cli)
+* [.NET SDK 9.0](https://dotnet.microsoft.com/en-us/download) or [Docker Engine](https://docs.docker.com/engine/install/)
 
 Please read through the [Logs Ingestion API in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview) article carefully before proceeding.
 
@@ -21,7 +22,7 @@ Please read through the [Logs Ingestion API in Azure Monitor](https://learn.micr
 1. Open your favorite code editor, e.g. VS Code. Open the local folder where you have cloned this repository.
 1. Copy the [config.template.toml](./WorkerApp/config.template.toml) file to `config.toml`, also in the [WorkerApp](./WorkerApp/) folder.
 1. Fill the blanks in `config.toml` using the information shown on the connector page
-1. Run the `WorkerApp` project
+1. Run the `WorkerApp` project (or bring up the Docker Compose project)
 1. Check your DCR metrics
 1. Check your Sentinel logs
 1. Check your connector page
@@ -61,3 +62,11 @@ dotnet run --project .\WorkerApp\
 <6> [ 12/05/2025 13:28:26 ] WorkerApp.Worker[1100] UploadToLogsAsync: Sent OK 204 to Custom-jamfprotectalerts
 <6> [ 12/05/2025 13:28:26 ] WorkerApp.Worker[1000] ExecuteAsync: OK
 ```
+
+### (or) Bring up the Docker Compose project
+
+```dotnetcli
+docker compose -f .\docker\docker-compose.yaml up
+```
+
+This will produce the same logs as above.
