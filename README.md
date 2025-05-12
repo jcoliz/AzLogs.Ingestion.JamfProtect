@@ -26,6 +26,14 @@ Please read through the [Logs Ingestion API in Azure Monitor](https://learn.micr
 1. Check your Sentinel logs
 1. Check your connector page
 
+### Clone this repository
+
+Be sure to clone this repo with submodules so you have the [AzDeploy.Bicep](https://github.com/jcoliz/AzDeploy.Bicep) project handy with the necessary module templates.
+
+```powershell
+git clone --recurse-submodules https://github.com/jcoliz/AzLogs.Ingestion.JamfProtect.git
+```
+
 ### Deploy Microsoft Sentinel workspace
 
 Deploy a fresh Microsoft Sentinel workspace to your Azure Subscription
