@@ -139,7 +139,7 @@ public partial class Worker(
     [LoggerMessage(Level = LogLevel.Critical, Message = "{Location}: Critical failure", EventId = 1009)]
     public partial void logCritical(Exception ex,[CallerMemberName] string? location = null);
 
-    [LoggerMessage(Level = LogLevel.Information, Message = "{Location}: Sent OK to {Stream} {Status}", EventId = 1100)]
+    [LoggerMessage(Level = LogLevel.Information, Message = "{Location}: Sent OK {Status} to {Stream}", EventId = 1100)]
     public partial void logSentOk(string Stream, int Status, [CallerMemberName] string? location = null);
 
     [LoggerMessage(Level = LogLevel.Error, Message = "{Location}: Send failed, returned no response", EventId = 1107)]
