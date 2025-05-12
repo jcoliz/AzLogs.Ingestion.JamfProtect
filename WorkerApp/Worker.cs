@@ -29,7 +29,7 @@ public partial class Worker(
                 {
                     logFail(ex);
                 }
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }            
         }
         catch (TaskCanceledException)
@@ -42,13 +42,14 @@ public partial class Worker(
         }
     }
 
-    protected ICollection<CustomJamfprotecttelemetryv1> GenerateTelemetryV1()
+    protected ICollection<CustomJamfprotecttelemetryv2> GenerateTelemetryV1()
     {
-        var result = new List<CustomJamfprotecttelemetryv1>()
+        var result = new List<CustomJamfprotecttelemetryv2>()
         {
             new()
             {
-                Host_info = new{ osversion = "osversion", host_name = "host_name", host_uuid = Guid.NewGuid().ToString() }
+                Metadata = new{ product = "product", schemaversion = "schemaversion" },
+                Host = new{ hostname = "hostname" }
             }
         };
 
