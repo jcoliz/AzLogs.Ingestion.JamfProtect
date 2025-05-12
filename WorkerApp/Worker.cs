@@ -20,8 +20,11 @@ public partial class Worker(
             {
                 try
                 {
-                    var logs = GenerateTelemetryV1();
-                    await UploadToLogsAsync("Custom-jamfprotecttelemetryv2",logs,stoppingToken);
+                    var telemetry = GenerateTelemetryV2();
+                    await UploadToLogsAsync("Custom-jamfprotecttelemetryv2",telemetry,stoppingToken);
+
+                    var logs = GenerateLogs();
+                    await UploadToLogsAsync("Custom-jamfprotectunifiedlogs",logs,stoppingToken);
 
                     logOk();
                 }
@@ -42,7 +45,7 @@ public partial class Worker(
         }
     }
 
-    protected ICollection<CustomJamfprotecttelemetryv2> GenerateTelemetryV1()
+    protected ICollection<CustomJamfprotecttelemetryv2> GenerateTelemetryV2()
     {
         var result = new List<CustomJamfprotecttelemetryv2>()
         {
@@ -50,6 +53,22 @@ public partial class Worker(
             {
                 Metadata = new{ product = "product", schemaversion = "schemaversion" },
                 Host = new{ hostname = "hostname" }
+            }
+        };
+
+        return result;
+    }
+
+    protected ICollection<CustomJamfprotectunifiedlogs> GenerateLogs()
+    {
+        var result = new List<CustomJamfprotectunifiedlogs>()
+        {
+            new()
+            {
+                Input = new{ 
+                    host = new{ protectVersion = "protectVersion" },
+                    match = new{ severity = 1, uuid = Guid.NewGuid().ToString() }
+                }
             }
         };
 
