@@ -1,0 +1,10 @@
+name: azlogs-jamfprotect
+services:
+  generate:
+    image: jcoliz/azlogs-jamfprotect:latest
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: generate
+    volumes: 
+      - ${PWD}/WorkerApp/config.toml:/app/config.toml
