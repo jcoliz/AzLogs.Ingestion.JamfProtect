@@ -26,6 +26,9 @@ public partial class Worker(
                     var logs = GenerateLogs();
                     await UploadToLogsAsync("Custom-jamfprotectunifiedlogs",logs,stoppingToken);
 
+                    var alerts = GenerateAlerts();
+                    await UploadToLogsAsync("Custom-jamfprotectalerts",alerts,stoppingToken);
+
                     logOk();
                 }
                 catch( Exception ex )
@@ -74,6 +77,24 @@ public partial class Worker(
 
         return result;
     }
+
+    protected ICollection<CustomJamfprotectalerts> GenerateAlerts()
+    {
+        var result = new List<CustomJamfprotectalerts>()
+        {
+            new()
+            {
+                Input = new{ 
+                    host = new{ protectVersion = "protectVersion" },
+                    match = new{ severity = 1, uuid = Guid.NewGuid().ToString() },
+                    eventType = "GPDownloadEvent"
+                }
+            }
+        };
+
+        return result;
+    }
+
 
     public async Task UploadToLogsAsync(string streamName, IEnumerable<object> dataPoints, CancellationToken stoppingToken)
     {
