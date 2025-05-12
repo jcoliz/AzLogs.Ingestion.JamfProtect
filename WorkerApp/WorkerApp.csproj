@@ -5,9 +5,32 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-WorkerApp-1874bf69-56d2-4e6c-8b71-74c1dc01fe53</UserSecretsId>
+    <ApiClientConfigFile>Api\nswag.json</ApiClientConfigFile>
+    <ApiClientInputFile>Api\openapi.yaml</ApiClientInputFile>
+    <ApiClientOutputFile>$(BaseIntermediateOutputPath)\Api.cs</ApiClientOutputFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+    <PackageReference Include="NSwag.MSBuild" Version="14.2.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
   </ItemGroup>
+
+    <!--Custom task to generate source code from OpenApi Specification before compilation-->
+    <Target Name="GenerateSources" BeforeTargets="BeforeBuild" Inputs="$(ApiClientConfigFile);$(ApiClientInputFile)" Outputs="$(ApiClientOutputFile)">
+      <Exec Command="$(NSwagExe_Net90) run $(ApiClientConfigFile) /variables:OutputFile=../$(ApiClientOutputFile)" ConsoleToMSBuild="true" />
+    </Target>
+   
+    <!--Custom task to remove generated source code before clean project-->
+    <Target Name="RemoveGenerateSources" BeforeTargets="CoreClean">
+        <RemoveDir Directories="$(ApiClientOutputFile)" />
+    </Target>
+  
+    <!--Register generated source code as project source code-->
+    <ItemGroup>
+      <Compile Include="$(ApiClientOutputFile)" />
+    </ItemGroup>
+
 </Project>
