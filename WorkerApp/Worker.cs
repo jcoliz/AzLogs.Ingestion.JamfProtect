@@ -21,7 +21,7 @@ public partial class Worker(
                 try
                 {
                     var logs = GenerateTelemetryV1();
-                    await UploadToLogsAsync(logs,stoppingToken);
+                    await UploadToLogsAsync("Custom-jamfprotecttelemetryv2",logs,stoppingToken);
 
                     logOk();
                 }
@@ -56,14 +56,14 @@ public partial class Worker(
         return result;
     }
 
-    public async Task UploadToLogsAsync(IEnumerable<object> dataPoints, CancellationToken stoppingToken)
+    public async Task UploadToLogsAsync(string streamName, IEnumerable<object> dataPoints, CancellationToken stoppingToken)
     {
         try
         {
             var response = await logsClient.UploadAsync
             (
                 ruleId: logOptions.Value.DcrImmutableId, 
-                streamName: logOptions.Value.Stream,
+                streamName: streamName,
                 logs: dataPoints,
                 cancellationToken: stoppingToken
             )
@@ -80,7 +80,7 @@ public partial class Worker(
                     break;
 
                 default:
-                    logOk();
+                    logSentOk(streamName, response.Status);
                     break;
             }
         }
@@ -98,6 +98,9 @@ public partial class Worker(
 
     [LoggerMessage(Level = LogLevel.Critical, Message = "{Location}: Critical failure", EventId = 1009)]
     public partial void logCritical(Exception ex,[CallerMemberName] string? location = null);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "{Location}: Sent OK to {Stream} {Status}", EventId = 1100)]
+    public partial void logSentOk(string Stream, int Status, [CallerMemberName] string? location = null);
 
     [LoggerMessage(Level = LogLevel.Error, Message = "{Location}: Send failed, returned no response", EventId = 1107)]
     public partial void logSendNoResponse([CallerMemberName] string? location = null);
