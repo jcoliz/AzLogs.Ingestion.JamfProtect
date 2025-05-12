@@ -19,11 +19,11 @@ Please read through the [Logs Ingestion API in Azure Monitor](https://learn.micr
 1. Find the "Jamf Protect Push Connector" in the Data Connectors. Open the connector page.
 1. Press "Deploy Jamf Protect Connector Resources"
 1. Open your favorite code editor, e.g. VS Code. Open the local folder where you have cloned this repository.
-1. Copy the [config.template.toml](./WorkerApp/config.template.toml) file to `config.toml`, also in the [WorkerAPp](./WorkerApp/) folder.
+1. Copy the [config.template.toml](./WorkerApp/config.template.toml) file to `config.toml`, also in the [WorkerApp](./WorkerApp/) folder.
 1. Fill the blanks in `config.toml` using the information shown on the connector page
 1. Run the `WorkerApp` project
 1. Check your DCR metrics
-1. Check your Snetinel logs
+1. Check your Sentinel logs
 1. Check your connector page
 
 ### Deploy Microsoft Sentinel workspace
